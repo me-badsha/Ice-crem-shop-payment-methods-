@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=9" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,shrink-to-fit=no"
+    />
+    <link rel="shortcut icon" href="images/logo.svg" />
+    <title>Ice Cream Sundae</title>
+    <link rel="stylesheet" href="styles.css" />
+    <!-- Vue.js CDN Link -->
+    <script src="https://unpkg.com/vue@3"></script>
+    <!-- Front Awsome CND -->
+    <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+  </head>
+
+  <body>
+    <div class="react" id="layout">
+      <!-- header start -->
+      <header>
+        <div class="container react" id="header">
+          <div>
+            <img class="logo" src="images/logo.svg" alt="Logo" />
+          </div>
+          <div class="textRight">
+            <!-- <img src="images/react.svg" alt="React" class="reactLogo" /><strong
+              >React</strong
+            > -->
+            <img src="images/png-transparent-vue-js-hd-logo-thumbnail.png" alt="Vue" class="reactLogo" /><strong
+              >Vue</strong>
+          </div>
+        </div>
+      </header>
+      <!-- header end -->
+
+      <!-- body start -->
+      <div class="mainBody react" id="app">
+        <div class="container react" id="iceCreamBuilder">
+          <!-- icecream start -->
+          <ice-cream :cart="cart"></ice-cream>
+          <!-- ice cream end -->
+
+          <!-- builder start -->
+          <div class="react" id="builder">
+            <div class="builder">
+              <h3>Choose which item do you want to eat! <span
+                class="quantity" :style="cart.length == 0? {color: 'red'} : {}">{{cart.length}}</span></h3>
+              <!-- items start -->
+              <div class="react" id="items">
+                <ul>
+                  <!-- item start -->
+                  <li class="react item" id="item" v-for="variant in variants">
+                    <span>{{variant.name}}</span>
+                    <!-- <span class="quantity">1</span> -->
+                    <div class="right">
+                      <!-- <button type="button" class="plus rounded" v-on:click=addToCart(variant.id)>+</button> -->
+                      <button type="button" class="plus rounded" @click=addToCart(variant.id)>+</button>
+                      <button type="button" class="minus rounded" @click=removeFromCart(variant.id)>-</button>
+                    </div>
+                  </li>
+                  <!-- item end -->
+
+                  <!-- <li class="item">
+                    <span>Chocolate</span>
+                    <div class="right">
+                      <button type="button" class="plus rounded">+</button>
+                      <button type="button" class="minus rounded">-</button>
+                    </div>
+                  </li>
+
+                  <li class="item">
+                    <span>Strawberry</span>
+                    <div class="right">
+                      <button type="button" class="plus rounded">+</button>
+                      <button type="button" class="minus rounded">-</button>
+                    </div>
+                  </li>
+
+                  <li class="item">
+                    <span>Orange</span>
+                    <div class="right">
+                      <button type="button" class="plus rounded">+</button>
+                      <button type="button" class="minus rounded">-</button>
+                    </div>
+                  </li> -->
+                </ul>
+              </div>
+              <!-- items end -->
+
+              <!-- total price start -->
+              <div class="total react" id="total">
+                <div>Total Price</div>
+                <div>{{ total }}Tk</div>
+              </div>
+              <!-- total price end -->
+              <button type="button" class="minus rounded" @click="clearCart()" v-if="cart.length > 0">Clr</button>
+              <button type="button" onclick="next()" class="order rounded" @click="toggoleModal">
+                Payment!
+              </button>
+            </div>
+
+            <!-- modal start -->
+              <order-form :cart="cart" v-if="showModal" @toggle-order-form="toggoleModal" :total="total" @cart-clear="clearCart"></order-form>
+            <!-- modal end -->
+          </div>
+          <!-- builder end -->
+        </div>
+      </div>
+      <!-- body end -->
+
+      <!-- footer start -->
+      <footer>
+        <div class="container react" id="footer">
+          <div>
+            Copyright &copy;badsha2023.
+          </div>
+          <div class="textRight">
+            Built with <span class="red">&hearts;</span>
+            <a
+              href="https://vuejs.org/guide/introduction.html"
+              target="_blank"
+              >Vue.js App</a
+            >
+          </div>
+        </div>
+      </footer>
+      <!-- footer end -->
+    </div>
+
+    <script>
+      // modal control
+      var next = () => {
+        // document.querySelector(".backdrop").style.display = "block";
+        // document.querySelector(".modalBody").style.display = "block";
+      };
+      var removeModal = () => {
+        document.querySelector(".backdrop").style.display = "none";
+        document.querySelector(".modalBody").style.display = "none";
+      };
+      // turn on debug mode
+      var debugMode = false;
+      var debugActivate = function (a) {
+        [].forEach.call(document.querySelectorAll(a), function (b) {
+          var color = (~~(Math.random() * (1 << 24))).toString(16);
+          b.style.outline = "2px solid #" + color;
+          b.style.setProperty("--contenti", `"${b.id}"`);
+          b.style.setProperty("--color", `#${color}`);
+          if (b.id !== "scoop") b.style.background = "rgba(0, 0, 0, 0.3)";
+        });
+        debugMode = true;
+      };
+
+      var debugDeActivate = function (a) {
+        [].forEach.call(document.querySelectorAll(a), function (b) {
+          b.style.outline = "none";
+          b.style.removeProperty("--contenti");
+          b.style.removeProperty("--color");
+          if (b.id !== "scoop") b.style.background = "";
+        });
+        debugMode = false;
+      };
+
+      document.addEventListener("keyup", (e) => {
+        if (e.code === "KeyD") {
+          debugMode ? debugDeActivate(".react") : debugActivate(".react");
+        }
+      });
+    </script>
+    <!-- Custom Js -->
+    <script src="main.js"></script>
+    <script src="./components/ice-cream.js"></script>
+    <script src="./components/order-form.js"></script>
+    <script>
+        const mountedapp = app.mount('#app');
+    </script>
+  </body>
+</html>
